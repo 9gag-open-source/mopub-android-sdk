@@ -1,4 +1,8 @@
 apply from: 'shared-build.gradle'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.9gag-open-source'
+version='4.12.0'
 
 dependencies {
     compile project(':mopub-sdk:mopub-sdk-base')
