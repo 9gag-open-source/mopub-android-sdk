@@ -1,5 +1,9 @@
 package com.mopub.nativeads;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,10 +16,6 @@ import com.mopub.nativeads.CustomEventNative.CustomEventNativeListener;
 import com.mopub.network.Networking;
 import com.mopub.volley.VolleyError;
 import com.mopub.volley.toolbox.ImageLoader;
-
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Collection of helper methods to assist with image downloading and displaying
@@ -36,6 +36,20 @@ public class NativeImageHelper {
          * @param errorCode An enum value with the relevant error message.
          */
         void onImagesFailedToCache(NativeErrorCode errorCode);
+    }
+
+    public static void preCacheImages(@Nullable final CustomEventNative.CustomEventNativeListener customEventNativeListener, final StaticNativeAd ad, final List<String> imageUrls) {
+        FrescoImageHelper.preCacheImages(imageUrls, new NativeImageHelper.ImageListener() {
+            @Override
+            public void onImagesCached() {
+                if (customEventNativeListener != null) customEventNativeListener.onNativeAdLoaded(ad);
+            }
+
+            @Override
+            public void onImagesFailedToCache(final NativeErrorCode errorCode) {
+                if (customEventNativeListener != null) customEventNativeListener.onNativeAdFailed(errorCode);
+            }
+        });
     }
 
     /**
