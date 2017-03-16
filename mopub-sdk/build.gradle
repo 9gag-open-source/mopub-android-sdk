@@ -6,7 +6,7 @@ version='4.12.0'
 
 dependencies {
     compile project(':mopub-sdk:mopub-sdk-base')
-    //compile project(':mopub-sdk:mopub-sdk-banner')
+    compile project(':mopub-sdk:mopub-sdk-banner')
     //compile project(':mopub-sdk:mopub-sdk-interstitial')
     //compile project(':mopub-sdk:mopub-sdk-rewardedvideo')
     compile project(':mopub-sdk:mopub-sdk-native-static')
