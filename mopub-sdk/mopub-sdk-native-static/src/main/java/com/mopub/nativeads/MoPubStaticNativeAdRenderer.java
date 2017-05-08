@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.mopub.common.Preconditions;
 import com.mopub.common.VisibleForTesting;
 
@@ -71,10 +72,24 @@ public class MoPubStaticNativeAdRenderer implements MoPubAdRenderer<StaticNative
         NativeRendererHelper.addTextView(staticNativeViewHolder.textView, staticNativeAd.getText());
         NativeRendererHelper.addTextView(staticNativeViewHolder.callToActionView,
                 staticNativeAd.getCallToAction());
-        NativeImageHelper.loadImageView(staticNativeAd.getMainImageUrl(),
-                staticNativeViewHolder.mainImageView);
-        NativeImageHelper.loadImageView(staticNativeAd.getIconImageUrl(),
-                staticNativeViewHolder.iconImageView);
+
+        if (staticNativeViewHolder.mainImageView instanceof SimpleDraweeView) {
+            FrescoImageHelper.loadImageView(staticNativeAd.getMainImageUrl(),
+                    (SimpleDraweeView) staticNativeViewHolder.mainImageView);
+        } else {
+            NativeImageHelper.loadImageView(staticNativeAd.getMainImageUrl(),
+                    staticNativeViewHolder.mainImageView);
+        }
+
+        if (staticNativeViewHolder.iconImageView instanceof SimpleDraweeView) {
+            FrescoImageHelper.loadImageView(staticNativeAd.getMainImageUrl(),
+                    (SimpleDraweeView) staticNativeViewHolder.iconImageView);
+        } else {
+            NativeImageHelper.loadImageView(staticNativeAd.getIconImageUrl(),
+                    staticNativeViewHolder.iconImageView);
+        }
+
+
         NativeRendererHelper.addPrivacyInformationIcon(
                 staticNativeViewHolder.privacyInformationIconImageView,
                 staticNativeAd.getPrivacyInformationIconImageUrl(),
