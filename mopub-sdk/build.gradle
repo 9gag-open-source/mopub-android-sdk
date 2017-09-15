@@ -10,7 +10,7 @@ dependencies {
     //compile project(':mopub-sdk:mopub-sdk-interstitial')
     //compile project(':mopub-sdk:mopub-sdk-rewardedvideo')
     compile project(':mopub-sdk:mopub-sdk-native-static')
-    //compile project(':mopub-sdk:mopub-sdk-native-video')
+    compile project(':mopub-sdk:mopub-sdk-native-video')
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.2.2'
