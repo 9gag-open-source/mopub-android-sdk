@@ -6,19 +6,20 @@ repositories {
     flatDir {
         dirs project(':mopub-sdk').file('../libs')
     }
+    maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
 }
 
 project.group = 'com.mopub'
-project.version = '4.15.0'
+project.version = '4.16.1'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '25.0.2'
     lintOptions { abortOnError false }
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        versionCode 52
+        versionCode 54
         versionName version
         minSdkVersion 16
         targetSdkVersion 25
@@ -46,6 +47,12 @@ android {
             // If these tests *require* platform APIs we may want to make them
             // connected tests instead.
             returnDefaultValues = true
+
+            // Test JVM settings since we have a lot of classes loaded.
+            all {
+                jvmArgs '-XX:MaxPermSize=4096m', '-Xmx8192m', '-noverify'
+                forkEvery 200
+            }
         }
     }
 
