@@ -16,6 +16,7 @@ import android.view.View;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.mopub.common.DataKeys;
 import com.mopub.common.VisibleForTesting;
 import com.mopub.common.logging.MoPubLog;
 
