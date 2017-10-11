@@ -1,5 +1,11 @@
 package com.mopub.nativeads;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -23,7 +29,9 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Renderer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer;
+import com.google.android.exoplayer2.extractor.Extractor;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.extractor.mp4.Mp4Extractor;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -31,11 +39,10 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
-import com.google.android.exoplayer2.extractor.Extractor;
-import com.google.android.exoplayer2.extractor.mp4.Mp4Extractor;
-import com.google.android.exoplayer2.upstream.DataSource;
+
 import com.mopub.common.Preconditions;
 import com.mopub.common.VisibleForTesting;
 import com.mopub.common.event.BaseEvent;
@@ -48,12 +55,6 @@ import com.mopub.mobileads.VastVideoConfig;
 import com.mopub.nativeads.NativeVideoController.NativeVideoProgressRunnable.ProgressListener;
 import com.mopub.nativeads.VisibilityTracker.VisibilityChecker;
 import com.mopub.network.TrackingRequest;
-
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Wrapper class around the {@link ExoPlayer} to provide a nice interface into the player along
@@ -164,7 +165,7 @@ public class NativeVideoController implements ExoPlayer.EventListener, OnAudioFo
                         visibilityTrackingEvents,
                         vastVideoConfig),
                 new MoPubExoPlayerFactory(),
-                eventDetails, 
+                eventDetails,
                 (AudioManager) context.getSystemService(Context.AUDIO_SERVICE));
     }
 
@@ -342,6 +343,10 @@ public class NativeVideoController implements ExoPlayer.EventListener, OnAudioFo
         if (mListener != null) {
             mListener.onStateChanged(playWhenReady, newState);
         }
+    }
+
+    @Override
+    public void onRepeatModeChanged(final int mode) {
     }
 
     public void seekTo(final long ms) {
