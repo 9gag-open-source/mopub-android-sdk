@@ -91,7 +91,11 @@ public class Networking {
                         @Override
                         protected int sizeOf(String key, Bitmap value) {
                             if (value != null) {
-                                return value.getRowBytes() * value.getHeight();
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                    return value.getAllocationByteCount();
+                                }
+
+                                return value.getByteCount();
                             }
 
                             return super.sizeOf(key, value);
