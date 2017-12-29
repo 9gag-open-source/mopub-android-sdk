@@ -49,6 +49,7 @@ import com.mopub.common.event.BaseEvent;
 import com.mopub.common.event.Event;
 import com.mopub.common.event.EventDetails;
 import com.mopub.common.event.MoPubEvents;
+import com.mopub.common.logging.MoPubLog;
 import com.mopub.mobileads.RepeatingHandlerRunnable;
 import com.mopub.mobileads.VastTracker;
 import com.mopub.mobileads.VastVideoConfig;
@@ -311,6 +312,11 @@ public class NativeVideoController implements ExoPlayer.EventListener, OnAudioFo
     @Override
     public void onPlayerStateChanged(final boolean playWhenReady, final int newState) {
         if (newState == STATE_ENDED && mFinalFrame == null) {
+            if (mExoPlayer == null || mSurface == null || mTextureView == null) {
+                MoPubLog.w("onPlayerStateChanged called afer view has been recycled.");
+                return;
+            }
+
             mFinalFrame = new BitmapDrawable(mContext.getResources(), mTextureView.getBitmap());
             mNativeVideoProgressRunnable.requestStop();
         }
@@ -525,6 +531,7 @@ public class NativeVideoController implements ExoPlayer.EventListener, OnAudioFo
         int totalRequiredPlayTimeMs;
         int totalQualifiedPlayCounter;
         boolean isTracked;
+        Integer minimumVisiblePx;
     }
 
     static class NativeVideoProgressRunnable extends RepeatingHandlerRunnable {
@@ -612,7 +619,7 @@ public class NativeVideoController implements ExoPlayer.EventListener, OnAudioFo
                     continue;
                 }
                 if (forceTrigger || mVisibilityChecker.isVisible(mTextureView, mTextureView,
-                        event.minimumPercentageVisible)) {
+                        event.minimumPercentageVisible, event.minimumVisiblePx)) {
                     event.totalQualifiedPlayCounter += mUpdateIntervalMillis;
                     if (forceTrigger ||
                             event.totalQualifiedPlayCounter >= event.totalRequiredPlayTimeMs) {
